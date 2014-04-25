@@ -1,11 +1,15 @@
+import json
 import unittest
-from os import environ, unsetenv
+from os import environ
+
 from nose.tools import raises
+from mock import patch
+from requests import Response
+
 from strava import strava_utils
 
 
 class StravaUtilsTestCase(unittest.TestCase):
-
     expected_client_secret = 'aaabbbccc_is_a_secret'
     expected_client_id = "1234567"
 
@@ -32,3 +36,16 @@ class StravaUtilsTestCase(unittest.TestCase):
         secret, client_id = strava_utils.get_settings()
         self.assertEqual(client_id, self.expected_client_id)
         self.assertEqual(secret, self.expected_client_secret)
+
+
+    @patch('strava.strava_utils.get_settings')
+    @patch('requests.post')
+    def test_get_token(self, post_mock, settings_mock):
+        settings_mock.return_value = self.expected_client_secret, self.expected_client_id
+        rv = Response()
+        rv.status_code = 200
+        post_mock.return_value = rv
+        data = '{ "test": "json"}'
+        post_mock.return_value._content = data
+        response = strava_utils.get_token("12345")
+        self.assertEqual(json.loads(data), response)

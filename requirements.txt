@@ -1,3 +1,4 @@
 flask
 nosetest
 mock
+requests
