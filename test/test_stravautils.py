@@ -18,7 +18,8 @@ class StravaUtilsTestCase(unittest.TestCase):
     @raises(RuntimeError)
     def test_get_settings_fails_with_no_id(self):
         environ['CLIENT_SECRET'] = self.expected_client_secret
-        strava_utils.get_settings()
+        self.assertRaisesRegexp(RuntimeError, 'CLIENT_ID', strava_utils.get_settings())
+
 
     @raises(RuntimeError)
     def test_get_settings_fails_with_no_secret(self):
