@@ -8,6 +8,7 @@ import logging
 CLIENT_SECRET = 'CLIENT_SECRET'
 CLIENT_ID = 'CLIENT_ID'
 TOKEN_EXCHANGE_URL = 'https://www.strava.com/oauth/token'
+OAUTH_URL = "https://www.strava.com/oauth/authorize"
 
 
 def get_settings():
@@ -28,11 +29,9 @@ def get_settings():
 
 def get_token(code):
     client_secret, client_id = get_settings()
-
     data = {"client_id": client_id,
             "client_secret": client_secret,
             "code": code}
-
     response = requests.post(TOKEN_EXCHANGE_URL, data=data)
     logging.info("Login post returned %d" % response.status_code)
     logging.debug(response.json())
