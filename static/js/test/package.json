@@ -1,0 +1,11 @@
+{
+    "name": "strava-yoy-tests",
+    "description": "Test dependencies for strava yoy",
+    "devDependencies": {
+        "phantomjs" : "*",
+        "karma" : "*",
+        "karma-junit-reporter" : "*",
+        "karma-jasmine" : "*",
+        "karma-ng-scenario" : "*"
+    }
+}
