@@ -56,3 +56,4 @@ docs/_build/
 .idea
 .idea/dictionaries/
 .idea/dictionaries/jkruck.xml
+static/js/test/node_modules/
