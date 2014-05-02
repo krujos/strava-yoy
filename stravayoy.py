@@ -1,5 +1,5 @@
 __author__ = 'jkruck'
-from flask import Flask, redirect, url_for, request, session,abort
+from flask import Flask, redirect, url_for, request, session, abort, jsonify
 from strava import strava_utils
 import logging
 
@@ -49,9 +49,10 @@ def get_athlete():
     if "token" not in session:
         abort(401)
 
+    return jsonify({"id": session['athlete_id'], "name": session['athlete_name']})
+
 
 if __name__ == "__main__":
-
     app.logger.setLevel(logging.DEBUG)
     app.logger.addHandler(logging.FileHandler('strava.log'))
     app.logger.addHandler(logging.StreamHandler())
