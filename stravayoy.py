@@ -1,6 +1,8 @@
 __author__ = 'jkruck'
 from flask import Flask, redirect, url_for, request, session,abort
 from strava import strava_utils
+import logging
+
 
 Flask.get = lambda self, path: self.route(path, methods=['get'])
 Flask.put = lambda self, path: self.route(path, methods=['put'])
@@ -29,6 +31,7 @@ def get_root():
     #Call back from Strava for token exchange.
     if request.args.get('code'):
         do_token_exchange(request.args.get('code'))
+        app.logger.debug("%s logged in" % session['athlete_name'])
         return redirect(url_for('static', filename='loggedin.html'))
 
     return redirect(url_for('static', filename='index.html'))
@@ -41,5 +44,9 @@ def login():
 
 
 if __name__ == "__main__":
+
+    app.logger.setLevel(logging.DEBUG)
+    app.logger.addHandler(logging.FileHandler('strava.log'))
+    app.logger.addHandler(logging.StreamHandler())
     app.debug = True
     app.run()
