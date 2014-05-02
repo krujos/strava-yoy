@@ -15,6 +15,15 @@ import stravayoy
 
 
 class AppTests(unittest.TestCase):
+    athlete = {
+        "access_token": "83ebeabdec09f6670863766f792ead24d61fe3f9",
+        "athlete": {
+            "id": 227615,
+            "firstname": "John",
+            "lastname": "Applestrava",
+            "email": "john@applestrava.com"
+        }
+    }
 
     def setUp(self):
         self.app = stravayoy.app.test_client()
@@ -33,15 +42,7 @@ class AppTests(unittest.TestCase):
 
     @patch('strava.strava_utils.get_token', autospec=True)
     def test_do_token_exchange(self, get_token_mock):
-        get_token_mock.return_value = {
-            "access_token": "83ebeabdec09f6670863766f792ead24d61fe3f9",
-            "athlete": {
-                "id": 227615,
-                "firstname": "John",
-                "lastname": "Applestrava",
-                "email": "john@applestrava.com"
-            }
-        }
+        get_token_mock.return_value = self.athlete
         with stravayoy.app.test_request_context('/&code=12345', method='GET'):
             stravayoy.do_token_exchange("12345")
             get_token_mock.assert_called_once_with("12345")
@@ -50,3 +51,6 @@ class AppTests(unittest.TestCase):
     def test_get_athlete_while_not_logged_in_should_be_unauthroized(self):
         rv = self.app.get('/athlete')
         self.assertEqual(401, rv.status_code)
+
+    def test_get_athlete_logged_in_returns_expected(self):
+        pass
