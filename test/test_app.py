@@ -4,8 +4,8 @@ import unittest
 from os import environ
 
 from mock import patch
+import json
 import flask
-from flask import Response
 
 
 #Setup the environment variables so the setup code executes. Seems like there should be a
@@ -59,8 +59,9 @@ class AppTests(unittest.TestCase):
                 sess['athlete_name'] = "John Applestrava"
                 sess['athlete_id'] = self.athlete['athlete']['id']
                 sess['token'] = self.athlete['access_token']
-                resp = c.get('/athlete')
-                j = resp.json()
-                self.assertEquals("John Applestrava", j['athlete_name'])
-                self.assertEquals(227615, j['athlete_id'])
+            resp = c.get('/athlete')
+            self.assertEqual(200, resp.status_code)
+            j = json.loads(resp.data)
+            self.assertEquals("John Applestrava", j['name'])
+            self.assertEquals(227615, j['id'])
 
