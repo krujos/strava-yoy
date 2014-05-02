@@ -46,3 +46,7 @@ class AppTests(unittest.TestCase):
             stravayoy.do_token_exchange("12345")
             get_token_mock.assert_called_once_with("12345")
             self.assertEqual(flask.session['token'], "83ebeabdec09f6670863766f792ead24d61fe3f9")
+
+    def test_get_athlete_while_not_logged_in_should_be_unauthroized(self):
+        rv = self.app.get('/athlete')
+        self.assertEqual(401, rv.status_code)

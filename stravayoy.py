@@ -42,6 +42,12 @@ def login():
     return redirect("%s?client_id=%s&response_type=code&redirect_uri=%s&scope=view_private"
                     % (strava_utils.OAUTH_URL, client_id, redirect_url))
 
+@app.get('/athlete')
+def get_athlete():
+    """If there is a current user, return it"""
+    if "token" not in session:
+        abort(401)
+
 
 if __name__ == "__main__":
 

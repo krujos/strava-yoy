@@ -11,7 +11,7 @@ describe('stravaApp controllers', function () {
             ctlr = $controller('StravaController', {$scope: scope});
         }));
 
-        it('should pass', function () {
+        it('should should set the username and try to load the logged in user', function () {
             expect(true).toBeTruthy();
         });
 
