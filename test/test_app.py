@@ -7,6 +7,7 @@ from mock import patch
 import flask
 
 
+
 #Setup the environment variables so the setup code executes. Seems like there should be a
 #way to mock with with patch, but I could not figure it out.
 environ['CLIENT_SECRET'] = 'secret'
@@ -46,3 +47,6 @@ class AppTests(unittest.TestCase):
             stravayoy.do_token_exchange("12345")
             get_token_mock.assert_called_once_with("12345")
             self.assertEqual(flask.session['token'], "83ebeabdec09f6670863766f792ead24d61fe3f9")
+
+    def test_get_activities_searches_for_correct_date_range(self):
+        self.fail("NYI")
