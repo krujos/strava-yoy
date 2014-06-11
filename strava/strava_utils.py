@@ -37,3 +37,7 @@ def get_token(code):
     logging.debug(response.json())
 
     return response.json()
+
+
+def get_activities_for_user(start_date, duration):
+    pass

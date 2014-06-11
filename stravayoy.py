@@ -1,5 +1,7 @@
 __author__ = 'jkruck'
-from flask import Flask, redirect, url_for, request, session,abort
+from re import search
+
+from flask import Flask, redirect, url_for, request, session, abort, jsonify
 
 from strava import strava_utils
 
@@ -14,6 +16,7 @@ client_secret, client_id = strava_utils.get_settings()
 app.secret_key = client_secret
 redirect_url = "http://127.0.0.1:5000"
 
+#valid_date = compile("\d\d-\d\d-\d\d\d\d")
 
 def do_token_exchange(code):
     session.permanent = True
@@ -44,7 +47,24 @@ def login():
 
 @app.get('/activities')
 def get_activities():
-    pass
+    """
+    Get user activities for a number of days starting on start_date. We expect url parameters for
+    start_date and num_days. num_days must be > 0
+    """
+    start_date = request.args.get('start_date')
+    num_days = request.args.get('num_days')
+
+    if not num_days or not start_date:
+        abort(400)
+
+    num_days = int(num_days)
+    if 1 > num_days:
+        abort(400)
+
+    if search(r"\d\d-\d\d-\d\d\d\d", start_date) is None:
+        abort(400)
+
+    return jsonify(strava_utils.get_activities_for_user(start_date, num_days))
 
 
 if __name__ == "__main__":
