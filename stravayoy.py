@@ -1,6 +1,8 @@
 __author__ = 'jkruck'
 from flask import Flask, redirect, url_for, request, session,abort
+
 from strava import strava_utils
+
 
 Flask.get = lambda self, path: self.route(path, methods=['get'])
 Flask.put = lambda self, path: self.route(path, methods=['put'])
@@ -38,6 +40,11 @@ def get_root():
 def login():
     return redirect("%s?client_id=%s&response_type=code&redirect_uri=%s&scope=view_private"
                     % (strava_utils.OAUTH_URL, client_id, redirect_url))
+
+
+@app.get('/activities')
+def get_activities():
+    pass
 
 
 if __name__ == "__main__":
