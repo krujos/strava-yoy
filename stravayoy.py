@@ -1,5 +1,6 @@
 __author__ = 'jkruck'
-from re import search
+
+from re import search, compile
 
 from flask import Flask, redirect, url_for, request, session, abort, jsonify
 
@@ -16,7 +17,8 @@ client_secret, client_id = strava_utils.get_settings()
 app.secret_key = client_secret
 redirect_url = "http://127.0.0.1:5000"
 
-#valid_date = compile("\d\d-\d\d-\d\d\d\d")
+valid_date = compile(r"\d\d-\d\d-\d\d\d\d")
+
 
 def do_token_exchange(code):
     session.permanent = True
@@ -61,7 +63,7 @@ def get_activities():
     if 1 > num_days:
         abort(400)
 
-    if search(r"\d\d-\d\d-\d\d\d\d", start_date) is None:
+    if search(valid_date, start_date) is None:
         abort(400)
 
     return jsonify(strava_utils.get_activities_for_user(start_date, num_days))
