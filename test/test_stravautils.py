@@ -12,6 +12,7 @@ from strava import strava_utils
 class StravaUtilsTestCase(unittest.TestCase):
     expected_client_secret = 'aaabbbccc_is_a_secret'
     expected_client_id = "1234567"
+    start_date_epoch = 1160132400
 
     def setUp(self):
         if 'CLIENT_SECRET' in environ:
@@ -50,5 +51,14 @@ class StravaUtilsTestCase(unittest.TestCase):
         response = strava_utils.get_token("12345")
         self.assertEqual(json.loads(data), response)
 
-    def test_get_activities(self):
-        self.fail('NYI')
+    def test_days_to_seconds(self):
+        self.expectEquals(86400, strava_utils.days_to_seconds(1))
+        self.expectEquals(86400 * 2, strava_utils.days_to_seconds(2))
+        self.expectEquals(86400 * 111, strava_utils.days_to_seconds(111))
+
+    @patch('requests.get')
+    def test_get_activities(self, get_athlete_request):
+        expected_data = {"before": self.start_date_epoch,
+                         "after": self.start_date_epoch + strava_utils.days_to_seconds(5)}
+        get_athlete_request.assert_called_once_with('https://www.strava.com/api/v3/athlete/activities',
+                                                    data=expected_data)
