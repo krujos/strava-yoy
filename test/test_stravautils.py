@@ -49,3 +49,6 @@ class StravaUtilsTestCase(unittest.TestCase):
         post_mock.return_value._content = data
         response = strava_utils.get_token("12345")
         self.assertEqual(json.loads(data), response)
+
+    def test_get_activities(self):
+        self.fail('NYI')
