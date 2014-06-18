@@ -52,9 +52,9 @@ class StravaUtilsTestCase(unittest.TestCase):
         self.assertEqual(json.loads(data), response)
 
     def test_days_to_seconds(self):
-        self.expectEquals(86400, strava_utils.days_to_seconds(1))
-        self.expectEquals(86400 * 2, strava_utils.days_to_seconds(2))
-        self.expectEquals(86400 * 111, strava_utils.days_to_seconds(111))
+        self.assertEqual(86400, strava_utils.days_to_seconds(1))
+        self.assertEqual(86400 * 2, strava_utils.days_to_seconds(2))
+        self.assertEqual(86400 * 111, strava_utils.days_to_seconds(111))
 
     @patch('requests.get')
     def test_get_activities(self, get_athlete_request):

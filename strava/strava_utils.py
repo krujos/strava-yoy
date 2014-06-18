@@ -41,3 +41,7 @@ def get_token(code):
 
 def get_activities_for_user(start_date, duration):
     pass
+
+
+def days_to_seconds(num_days):
+    return 86400 * num_days
