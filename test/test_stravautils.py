@@ -64,7 +64,7 @@ class StravaUtilsTestCase(unittest.TestCase):
         rv = Response()
         rv.status_code = 200
         #This assumes we're running in the test directory.
-        rv._content = json.load(open('activities.json', 'r'))
+        rv._content = json.load(open('data/activities.json', 'r'))
         get_athlete_request.return_value = rv
         get_athlete_request.assert_called_once_with('https://www.strava.com/api/v3/athlete/activities',
                                                     data=expected_data)
