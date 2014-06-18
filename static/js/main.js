@@ -37,6 +37,7 @@ stravaApp.controller('UserController', function UserController($scope, $http) {
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
 
+    $scope.duration = 5;
 
 });
 
