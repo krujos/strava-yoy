@@ -56,29 +56,28 @@ class StravaUtilsTestCase(unittest.TestCase):
         self.assertEqual(86400 * 2, strava_utils.days_to_seconds(2))
         self.assertEqual(86400 * 111, strava_utils.days_to_seconds(111))
 
-    @patch('requests.get')
-    def test_get_activities(self, get_athlete_request):
-        expected_data = {"before": self.start_date_epoch,
-                         "after": self.start_date_epoch + strava_utils.days_to_seconds(5),
+    def generated_expected_data(self):
+        expected_data = {"after": self.start_date_epoch,
+                         "before": self.start_date_epoch + strava_utils.days_to_seconds(5),
                          "access_token": "fake_token"}
+        return expected_data
+
+    def make_response(self, code):
         rv = Response()
-        rv.status_code = 200
+        rv.status_code = code
         #This assumes we're running in the test directory.
         rv._content = json.load(open('data/activities.json', 'r'))
-        get_athlete_request.return_value = rv
+        return rv
+
+    @patch('requests.get')
+    def test_get_activities(self, get_athlete_request):
+        get_athlete_request.return_value = self.make_response(200)
         get_athlete_request.assert_called_once_with('https://www.strava.com/api/v3/athlete/activities',
-                                                    data=expected_data)
+                                                    data=self.generated_expected_data())
 
     @patch('requests.get')
     def test_get_activities_bad_return(self, get_athlete_request):
-        expected_data = {"before": self.start_date_epoch,
-                         "after": self.start_date_epoch + strava_utils.days_to_seconds(5),
-                         "access_token": "fake_token"}
-        rv = Response()
-        rv.status_code = 500
-        #This assumes we're running in the test directory.
-        rv._content = json.load(open('data/activities.json', 'r'))
-        get_athlete_request.return_value = rv
-        get_athlete_request.assert_called_once_with('https://www.strava.com/api/v3/athlete/activities',
-                                                    data=expected_data)
+        get_athlete_request.return_value = self.make_response(500)
         self.assertIsNone(strava_utils.get_activities_for_user(self.start_date_epoch, 5, "fake_token"))
+        get_athlete_request.assert_called_once_with('https://www.strava.com/api/v3/athlete/activities',
+                                                    data=self.generated_expected_data())

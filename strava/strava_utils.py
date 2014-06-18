@@ -48,7 +48,12 @@ def get_activities_for_user(start_date, duration_days, access_token):
     @param duration is expected to be days
     @param access_token is used to access the strava API
     '''
-    data = {"after": start_date, "before": start_date + days_to_seconds(duration_days)}
+    data = {
+        "after": start_date,
+        "before": start_date + days_to_seconds(duration_days),
+        "access_token": access_token
+    }
+
     rv = requests.get(ACTIVITIES_LIST_URL, data=data)
     if 200 != rv.status_code:
         return None
