@@ -66,7 +66,7 @@ def get_activities():
     if search(valid_date, start_date) is None:
         abort(400)
 
-    return jsonify(strava_utils.get_activities_for_user(start_date, num_days))
+    return jsonify(strava_utils.get_activities_for_user(start_date, num_days, session['token']))
 
 
 if __name__ == "__main__":

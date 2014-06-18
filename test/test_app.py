@@ -10,6 +10,7 @@ import flask
 
 
 
+
 #Setup the environment variables so the setup code executes. Seems like there should be a
 #way to mock with with patch, but I could not figure it out.
 environ['CLIENT_SECRET'] = 'secret'
@@ -53,9 +54,13 @@ class AppTests(unittest.TestCase):
     @patch('strava.strava_utils.get_activities_for_user', autospec=True)
     def test_get_activities_searches_for_correct_date_range(self, get_activities_for_user_mock):
         get_activities_for_user_mock.return_value = {'foo': 'bar'}
-        rv = self.app.get('/activities?start_date=01-10-2010&num_days=4')
-        self.assertEqual(200, rv.status_code, "Status was not OK(200)")
-        get_activities_for_user_mock.assert_called_once_with("01-10-2010", 4)
+        with stravayoy.app.test_client() as c:
+            with c.session_transaction() as sess:
+                sess['token'] = "fake_token"
+
+            rv = c.get('/activities?start_date=01-10-2010&num_days=4')
+            self.assertEqual(200, rv.status_code, "Status(%d) was not OK(200)" % rv.status_code)
+            get_activities_for_user_mock.assert_called_once_with("01-10-2010", 4, "fake_token")
 
     def test_get_activities_400_with_no_start_date(self):
         self.assertEqual(400, self.app.get('/activities?num_days=4"').status_code)

@@ -9,6 +9,8 @@ CLIENT_SECRET = 'CLIENT_SECRET'
 CLIENT_ID = 'CLIENT_ID'
 TOKEN_EXCHANGE_URL = 'https://www.strava.com/oauth/token'
 OAUTH_URL = "https://www.strava.com/oauth/authorize"
+API_URL = "https://www.strava.com/api/v3"
+ACTIVITIES_LIST_URL = API_URL + "/athlete/activities"
 
 
 def get_settings():
@@ -39,8 +41,17 @@ def get_token(code):
     return response.json()
 
 
-def get_activities_for_user(start_date, duration):
-    pass
+def get_activities_for_user(start_date, duration_days, access_token):
+    '''
+    Call out to the Strava api and get the requested data.
+    @param start_date is expected to be an epoch timestamp
+    @param duration is expected to be days
+    @param access_token is used to access the strava API
+    '''
+    data = {"after": start_date, "before": start_date + days_to_seconds(duration_days)}
+    rv = requests.get(ACTIVITIES_LIST_URL, data=data)
+    if 200 != rv.status_code:
+        return None
 
 
 def days_to_seconds(num_days):

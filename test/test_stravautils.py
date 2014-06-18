@@ -68,3 +68,17 @@ class StravaUtilsTestCase(unittest.TestCase):
         get_athlete_request.return_value = rv
         get_athlete_request.assert_called_once_with('https://www.strava.com/api/v3/athlete/activities',
                                                     data=expected_data)
+
+    @patch('requests.get')
+    def test_get_activities_bad_return(self, get_athlete_request):
+        expected_data = {"before": self.start_date_epoch,
+                         "after": self.start_date_epoch + strava_utils.days_to_seconds(5),
+                         "access_token": "fake_token"}
+        rv = Response()
+        rv.status_code = 500
+        #This assumes we're running in the test directory.
+        rv._content = json.load(open('data/activities.json', 'r'))
+        get_athlete_request.return_value = rv
+        get_athlete_request.assert_called_once_with('https://www.strava.com/api/v3/athlete/activities',
+                                                    data=expected_data)
+        self.assertIsNone(strava_utils.get_activities_for_user(self.start_date_epoch, 5, "fake_token"))
