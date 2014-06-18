@@ -58,6 +58,8 @@ def get_activities_for_user(start_date, duration_days, access_token):
     if 200 != rv.status_code:
         return None
 
+    return rv.json()
+
 
 def days_to_seconds(num_days):
     return 86400 * num_days

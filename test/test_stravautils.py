@@ -81,6 +81,6 @@ class StravaUtilsTestCase(unittest.TestCase):
     def make_response(self, code):
         rv = Response()
         rv.status_code = code
-        #This assumes we're running in the test directory.
-        rv._content = json.load(open('data/activities.json', 'r'))
+        #This assumes we're running in the test directory. there must be a better way
+        rv._content = json.dumps(json.load(open('data/activities.json', 'r')))
         return rv
