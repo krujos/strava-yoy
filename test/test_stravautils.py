@@ -12,6 +12,7 @@ from strava import strava_utils
 class StravaUtilsTestCase(unittest.TestCase):
     expected_client_secret = 'aaabbbccc_is_a_secret'
     expected_client_id = "1234567"
+    start_date_epoch = 1160132400
 
     def setUp(self):
         if 'CLIENT_SECRET' in environ:

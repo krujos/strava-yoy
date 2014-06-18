@@ -9,6 +9,8 @@ CLIENT_SECRET = 'CLIENT_SECRET'
 CLIENT_ID = 'CLIENT_ID'
 TOKEN_EXCHANGE_URL = 'https://www.strava.com/oauth/token'
 OAUTH_URL = "https://www.strava.com/oauth/authorize"
+API_URL = "https://www.strava.com/api/v3"
+ACTIVITIES_LIST_URL = API_URL + "/athlete/activities"
 
 
 def get_settings():
