@@ -3,7 +3,7 @@
 var stravaApp = angular.module('stravaApp', ['ui.bootstrap']);
 
 // Main app controller.
-stravaApp.controller('StravaController', function StravaController($scope, $http) {
+stravaApp.controller('StravaController', function StravaController($scope) {
     $scope.login = function () {
         window.location.replace('/login');
     };
